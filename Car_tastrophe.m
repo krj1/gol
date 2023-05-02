@@ -2,38 +2,48 @@
 clc; close all; clear;
 
 
-t_max = 100;
-trials = 50;
+t_max = 200;
+trials = 250;
+interval = t_max / 10;
 
-count_o = zeros(trials, t_max);
-count_i = zeros(trials, t_max);
-%count_t = zeros(trials, t_max);
+ind = 0:0.005:1;
+
+count_o1 = zeros(trials, length(ind));
 
 
-for i = 1:trials
-    [count_oi, count_ii, count_ti] = TACS(.2, 4, 45, [20,40;1,1], t_max, .5, .5, 0);
-    count_o(i,1:end) = count_oi;
-    %count_i(i,1:end) = count_ii;
-    %count_t(i,1:end) = count_ti;
+
+for j = 1:length(ind)
+    for i = 1:trials
+        [count_oi1, ~, count_ti1] = TACS(0, 15, 45, [20,40;1,4], t_max, ind(j), .9, 0);
+        count_ss = count_oi1(end) - count_oi1(end - interval);
+        count_ss = count_ss / interval;
+        count_ss = count_ss / count_ti1(end);
+        count_o1(i,j) = count_ss;
+    end
+    done = floor(100*(j / length(ind)));
+    show = ['The simularion is ', num2str(done), '% done'];
+    disp(show)
 end
 
-
-points_o = mean(count_o);
-%points_i = mean(count_i);
-%points_t = mean(count_t);
-
-bars_o = std(count_o);
-%bars_i = std(count_i);
-%bars_t = std(count_t);
-
-x = 1:t_max;
-errorbar(points_o, bars_o)
-hold on
-%errorbar(points_i, bars_i)
-%errorbar(points_t, bars_t)
-
-legend('cars out','cars in','cars total', 'Location','northwest')
+points_o1 = mean(count_o1);
 
 
 
+bars_o1 = std(count_o1);
+
+%plot(ind, points_o1)
+
+
+
+%
+errorbar(ind, points_o1, bars_o1)
+
+
+%}
+
+xlabel('Car Density','FontSize',18);
+ylabel('Traffic flow [cars / time step]','FontSize',18);
+title('','FontSize',16)
+
+%legend('lol', 'Location','northwest')
 

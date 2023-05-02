@@ -60,6 +60,7 @@ for tick = 1:t_max
     
     carsCount_t = 0;
     
+    
     [img, carsCount_o, carsCount_i, carsCount_t] = rules(img, prob, carsCount_o, carsCount_i, carsCount_t, closure, speed);
     count_o(1,tick) = carsCount_o;
     count_i(1,tick) = carsCount_i;
